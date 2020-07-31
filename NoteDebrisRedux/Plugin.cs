@@ -1,86 +1,120 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Media;
-using TMPro;
-using UnityEngine;
+﻿using IPA.Utilities;
+using IPA;
+using System;
+using System.Reflection;
 using UnityEngine.SceneManagement;
-using IllusionPlugin;
-
+using IPALogger = IPA.Logging.Logger;
+using HarmonyLib;
 
 namespace NoteDebrisRedux
 {
-    public class Plugin : IPlugin
+
+	[Plugin(RuntimeOptions.SingleStartInit)]
+	public class Plugin
     {
-        public string Name => "Plugin Name";
-        public string Version => "0.0.1";
+        internal static string PluginName => "NoteDebrisRedux";
+        public const string Version = "0.0.0";
+		internal const string HARMONYID = "com.yoeyyutch.BeatSaber.NoteDebrisRedux";
 
-        bool doesPluginExist;
+		internal static readonly Harmony HarmonyInstance = new Harmony(HARMONYID);
 
-        public void OnApplicationStart()
+		[Init]
+		public void Init(IPALogger logger)
+		{
+			Logger.Log = logger;
+		}
+
+		[OnStart]
+		public void OnApplicationStart()
         {
-            SceneManager.activeSceneChanged += SceneManagerOnActiveSceneChanged;
-            SceneManager.sceneLoaded += SceneManager_sceneLoaded;
-
-            //Checks if a IPlugin with the name in quotes exists, in case you want to verify a plugin exists before trying to reference it, or change how you do things based on if a plugin is present
-            doesPluginExist = IllusionInjector.PluginManager.Plugins.Any(x => x.Name == "Saber Mod");
-
-
-        }
-
-        private void SceneManagerOnActiveSceneChanged(Scene oldScene, Scene newScene)
+			HarmonyInstance.PatchAll(Assembly.GetExecutingAssembly());
+		}
+		[OnExit]
+        public void OnApplicationExit()
         {
-
-            if (newScene.name == "Menu")
-            {
-                //Code to execute when entering The Menu
-
-
-            }
-
-            if (newScene.name == "GameCore")
-            {
-                //Code to execute when entering actual gameplay
-
-
-            }
-
-
-        }
-
-        private void SceneManager_sceneLoaded(Scene scene, LoadSceneMode arg1)
-        {
-            //Create GameplayOptions/SettingsUI if using either
-            if (scene.name == "Menu")
-                UI.BasicUI.CreateUI();
-
-        }
-
-        public void OnApplicationQuit()
-        {
-            SceneManager.activeSceneChanged -= SceneManagerOnActiveSceneChanged;
-            SceneManager.sceneLoaded -= SceneManager_sceneLoaded;
-        }
-
-        public void OnLevelWasLoaded(int level)
-        {
-
-        }
-
-        public void OnLevelWasInitialized(int level)
-        {
-        }
-
-        public void OnUpdate()
-        {
-
-
-        }
-
-        public void OnFixedUpdate()
-        {
-        }
-    }
+			HarmonyInstance.UnpatchAll(HARMONYID);
+		}
+	}
 }
+
+		//public void OnFixedUpdate()
+  //      {
+
+  //      }
+
+  //      public void OnUpdate()
+  //      {
+
+  //      }
+
+  //      public void OnActiveSceneChanged(Scene prevScene, Scene nextScene)
+  //      {
+
+  //      }
+
+        //public void OnSceneLoaded(Scene scene, LoadSceneMode sceneMode)
+        //{
+        //    // Initialize CustomUI settings
+        //    if (scene.name == "MenuCore")
+        //    {
+        //        Settings.Load();
+        //        UI.BasicUI.CreateGameplayOptionsUI();
+        //    }
+
+        //    // Check for scene MenuCore and GameCore, MenuCore for initializing on start, GameCore for changes to config
+        //    if (scene.name == "MenuCore" || scene.name == "GameCore")
+        //    {
+        //        if (!harmonyPatchesLoaded && Settings._isModEnabled)
+        //        {
+        //            Logger.Log.Info("Loading Harmony patches...");
+        //            LoadHarmonyPatches();
+        //        }
+        //        if (harmonyPatchesLoaded && !Settings._isModEnabled)
+        //        {
+        //            Logger.Log.Info("Unloading Harmony patches...");
+        //            UnloadHarmonyPatches();
+        //        }
+        //    }
+
+        //}
+
+
+        //internal void LoadHarmonyPatches()
+        //{
+        //    if (harmonyPatchesLoaded)
+        //    {
+        //        Logger.Log.Info("Harmony patches already loaded. Skipping...");
+        //        return;
+        //    }
+        //    try
+        //    {
+        //        harmonyInstance.PatchAll(Assembly.GetExecutingAssembly());
+        //        Logger.Log.Info("Loaded Harmony patches.");
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        Logger.Log.Error("Loading Harmony patches failed. Please check if you have Harmony installed.");
+        //        Logger.Log.Error(e.ToString());
+        //    }
+        //    harmonyPatchesLoaded = true;
+        //}
+
+        //internal void UnloadHarmonyPatches()
+        //{
+        //    if (!harmonyPatchesLoaded)
+        //    {
+        //        Logger.Log.Info("Harmony patches not loaded. Skipping...");
+        //        return;
+        //    }
+        //    try
+        //    {
+        //        harmonyInstance.UnpatchAll("com.yoeyyutch.BeatSaber.NoteDebrisRedux");
+        //        Logger.Log.Info("Unloaded Harmony patches.");
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        Logger.Log.Error("Unloading Harmony patches failed.");
+        //        Logger.Log.Error(e.ToString());
+        //    }
+        //    harmonyPatchesLoaded = false;
+        //}
