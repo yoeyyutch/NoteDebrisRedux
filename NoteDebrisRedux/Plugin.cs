@@ -28,11 +28,13 @@ namespace NoteDebrisRedux
 		public void OnApplicationStart()
         {
 			HarmonyInstance.PatchAll(Assembly.GetExecutingAssembly());
+			Logger.Log.Info("Harmony patches loaded");
 		}
 		[OnExit]
         public void OnApplicationExit()
         {
 			HarmonyInstance.UnpatchAll(HARMONYID);
+			Logger.Log.Info("Harmony patches unloaded.");
 		}
 	}
 }

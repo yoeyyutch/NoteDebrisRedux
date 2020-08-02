@@ -16,7 +16,7 @@ namespace NoteDebrisRedux
 			float minForce = 2f;
 			float maxForce = 8f;
 
-			float forceMultiplier = 1f;
+			float forceMultiplier = 3f;
 
 			minForce *= forceMultiplier;
 			maxForce *= forceMultiplier;
