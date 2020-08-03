@@ -12,16 +12,18 @@ namespace NoteDebrisRedux
 
 	[Plugin(RuntimeOptions.SingleStartInit)]
 	public class Plugin
-    {
-        internal static string PluginName => "NoteDebrisRedux";
-        public string Version => "1.2.0";
+	{
+		internal static string PluginName => "NoteDebrisRedux";
+		public string Version => "1.3.0";
 		internal const string HARMONYID = "com.yoeyyutch.BeatSaber.NoteDebrisRedux";
 
 		internal static bool harmonyPatchesLoaded = false;
 
 		internal static readonly Harmony harmonyInstance = new Harmony(HARMONYID);
 
-		//public static readonly string ModPrefsKey = "NoteDebrisRedux";
+		public static bool UsingNCM;
+		public static float NcmForceMultiplier;
+		public static float NcmDebrisLifetime;
 
 		public static float VelocityMultiplierX;
 		public static float VelocityMultiplierY;
@@ -38,10 +40,15 @@ namespace NoteDebrisRedux
 
 		public void LoadConfig()
 		{
+			UsingNCM = Config.UsingNCM;
+			NcmForceMultiplier = Config.NcmForceMultiplier;
+			NcmDebrisLifetime = Config.NcmDebrisLifetime;
+
 			VelocityMultiplierX = Config.VelocityMultiplierX;
 			VelocityMultiplierY = Config.VelocityMultiplierY;
 			VelocityMultiplierZ = Config.VelocityMultiplierZ;
 			DebrisLifetime = Config.DebrisLifetime;
+
 			Logger.Log.Info("Config Loaded");
 			Logger.Log.Info("X = " + VelocityMultiplierX.ToString());
 			Logger.Log.Info("Y = " + VelocityMultiplierY.ToString());
@@ -51,7 +58,7 @@ namespace NoteDebrisRedux
 
 		[OnStart]
 		public void OnApplicationStart()
-        {
+		{
 			Logger.Log.Info("Starting...");
 			LoadConfig();
 			BS_Utils.Utilities.BSEvents.gameSceneLoaded += LoadConfig;
@@ -60,8 +67,8 @@ namespace NoteDebrisRedux
 		}
 
 		[OnExit]
-        public void OnApplicationExit()
-        {
+		public void OnApplicationExit()
+		{
 			UnloadHarmonyPatches();
 			Logger.Log.Info("Exiting...");
 		}
@@ -107,84 +114,84 @@ namespace NoteDebrisRedux
 	}
 }
 
-		//public void OnFixedUpdate()
-  //      {
+//public void OnFixedUpdate()
+//      {
 
-  //      }
+//      }
 
-  //      public void OnUpdate()
-  //      {
+//      public void OnUpdate()
+//      {
 
-  //      }
+//      }
 
-  //      public void OnActiveSceneChanged(Scene prevScene, Scene nextScene)
-  //      {
+//      public void OnActiveSceneChanged(Scene prevScene, Scene nextScene)
+//      {
 
-  //      }
+//      }
 
-        //public void OnSceneLoaded(Scene scene, LoadSceneMode sceneMode)
-        //{
-        //    // Initialize CustomUI settings
-        //    if (scene.name == "MenuCore")
-        //    {
-        //        Settings.Load();
-        //        UI.BasicUI.CreateGameplayOptionsUI();
-        //    }
+//public void OnSceneLoaded(Scene scene, LoadSceneMode sceneMode)
+//{
+//    // Initialize CustomUI settings
+//    if (scene.name == "MenuCore")
+//    {
+//        Settings.Load();
+//        UI.BasicUI.CreateGameplayOptionsUI();
+//    }
 
-        //    // Check for scene MenuCore and GameCore, MenuCore for initializing on start, GameCore for changes to config
-        //    if (scene.name == "MenuCore" || scene.name == "GameCore")
-        //    {
-        //        if (!harmonyPatchesLoaded && Settings._isModEnabled)
-        //        {
-        //            Logger.Log.Info("Loading Harmony patches...");
-        //            LoadHarmonyPatches();
-        //        }
-        //        if (harmonyPatchesLoaded && !Settings._isModEnabled)
-        //        {
-        //            Logger.Log.Info("Unloading Harmony patches...");
-        //            UnloadHarmonyPatches();
-        //        }
-        //    }
+//    // Check for scene MenuCore and GameCore, MenuCore for initializing on start, GameCore for changes to config
+//    if (scene.name == "MenuCore" || scene.name == "GameCore")
+//    {
+//        if (!harmonyPatchesLoaded && Settings._isModEnabled)
+//        {
+//            Logger.Log.Info("Loading Harmony patches...");
+//            LoadHarmonyPatches();
+//        }
+//        if (harmonyPatchesLoaded && !Settings._isModEnabled)
+//        {
+//            Logger.Log.Info("Unloading Harmony patches...");
+//            UnloadHarmonyPatches();
+//        }
+//    }
 
-        //}
+//}
 
 
-        //internal void LoadHarmonyPatches()
-        //{
-        //    if (harmonyPatchesLoaded)
-        //    {
-        //        Logger.Log.Info("Harmony patches already loaded. Skipping...");
-        //        return;
-        //    }
-        //    try
-        //    {
-        //        harmonyInstance.PatchAll(Assembly.GetExecutingAssembly());
-        //        Logger.Log.Info("Loaded Harmony patches.");
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        Logger.Log.Error("Loading Harmony patches failed. Please check if you have Harmony installed.");
-        //        Logger.Log.Error(e.ToString());
-        //    }
-        //    harmonyPatchesLoaded = true;
-        //}
+//internal void LoadHarmonyPatches()
+//{
+//    if (harmonyPatchesLoaded)
+//    {
+//        Logger.Log.Info("Harmony patches already loaded. Skipping...");
+//        return;
+//    }
+//    try
+//    {
+//        harmonyInstance.PatchAll(Assembly.GetExecutingAssembly());
+//        Logger.Log.Info("Loaded Harmony patches.");
+//    }
+//    catch (Exception e)
+//    {
+//        Logger.Log.Error("Loading Harmony patches failed. Please check if you have Harmony installed.");
+//        Logger.Log.Error(e.ToString());
+//    }
+//    harmonyPatchesLoaded = true;
+//}
 
-        //internal void UnloadHarmonyPatches()
-        //{
-        //    if (!harmonyPatchesLoaded)
-        //    {
-        //        Logger.Log.Info("Harmony patches not loaded. Skipping...");
-        //        return;
-        //    }
-        //    try
-        //    {
-        //        harmonyInstance.UnpatchAll("com.yoeyyutch.BeatSaber.NoteDebrisRedux");
-        //        Logger.Log.Info("Unloaded Harmony patches.");
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        Logger.Log.Error("Unloading Harmony patches failed.");
-        //        Logger.Log.Error(e.ToString());
-        //    }
-        //    harmonyPatchesLoaded = false;
-        //}
+//internal void UnloadHarmonyPatches()
+//{
+//    if (!harmonyPatchesLoaded)
+//    {
+//        Logger.Log.Info("Harmony patches not loaded. Skipping...");
+//        return;
+//    }
+//    try
+//    {
+//        harmonyInstance.UnpatchAll("com.yoeyyutch.BeatSaber.NoteDebrisRedux");
+//        Logger.Log.Info("Unloaded Harmony patches.");
+//    }
+//    catch (Exception e)
+//    {
+//        Logger.Log.Error("Unloading Harmony patches failed.");
+//        Logger.Log.Error(e.ToString());
+//    }
+//    harmonyPatchesLoaded = false;
+//}
