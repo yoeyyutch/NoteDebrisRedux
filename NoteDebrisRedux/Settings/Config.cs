@@ -11,7 +11,9 @@ namespace NoteDebrisRedux.Settings
 		static BS_Utils.Utilities.Config config;
 
 		static readonly string configName = "NoteDebrisRedux";
-		static readonly string section = "Settings";
+		static readonly string sectionOne = "NoteCutMinimizerSettings";
+		static readonly string sectionTwo = "NoteDebrisReduxSettings";
+		static readonly string sectionThree = "DebugSettings";
 
 		internal static void Init()
 		{
@@ -36,11 +38,11 @@ namespace NoteDebrisRedux.Settings
 		{
 			get
 			{
-				return config.GetBool(section, useNcmMode, false, true);
+				return config.GetBool(sectionOne, useNcmMode, false, true);
 			}
 			set
 			{
-				config.SetBool(section, useNcmMode, value);
+				config.SetBool(sectionOne, useNcmMode, value);
 			}
 		}
 
@@ -49,11 +51,11 @@ namespace NoteDebrisRedux.Settings
 		{
 			get
 			{
-				return config.GetFloat(section, ncmForceMultiplier, 2f, true);
+				return config.GetFloat(sectionOne, ncmForceMultiplier, 2f, true);
 			}
 			set
 			{
-				config.SetFloat(section, ncmForceMultiplier, value);
+				config.SetFloat(sectionOne, ncmForceMultiplier, value);
 			}
 		}
 
@@ -62,26 +64,25 @@ namespace NoteDebrisRedux.Settings
 		{
 			get
 			{
-				return config.GetFloat(section, ncmDebrisLifetime, 1f, true);
+				return config.GetFloat(sectionOne, ncmDebrisLifetime, 1f, true);
 			}
 			set
 			{
-				config.SetFloat(section, ncmDebrisLifetime, value);
+				config.SetFloat(sectionOne, ncmDebrisLifetime, value);
 			}
 		}
 
 
 		static readonly string velocityMultiplierX = "VelocityMultiplierX";
-
 		internal static float VelocityMultiplierX
 		{
 			get
 			{
-				return config.GetFloat(section, velocityMultiplierX, 2.0f, true);
+				return config.GetFloat(sectionOne, velocityMultiplierX, 2.0f, true);
 			}
 			set
 			{
-				config.SetFloat(section, velocityMultiplierX, value);
+				config.SetFloat(sectionOne, velocityMultiplierX, value);
 			}
 		}
 
@@ -90,11 +91,11 @@ namespace NoteDebrisRedux.Settings
 		{
 			get
 			{
-				return config.GetFloat(section, velocityMultiplierY, 2.0f, true);
+				return config.GetFloat(sectionOne, velocityMultiplierY, 2.0f, true);
 			}
 			set
 			{
-				config.SetFloat(section, velocityMultiplierZ, value);
+				config.SetFloat(sectionOne, velocityMultiplierZ, value);
 			}
 		}
 
@@ -103,11 +104,11 @@ namespace NoteDebrisRedux.Settings
 		{
 			get
 			{
-				return config.GetFloat(section, velocityMultiplierZ, 2.0f, true);
+				return config.GetFloat(sectionOne, velocityMultiplierZ, 2.0f, true);
 			}
 			set
 			{
-				config.SetFloat(section, velocityMultiplierZ, value);
+				config.SetFloat(sectionOne, velocityMultiplierZ, value);
 			}
 		}
 
@@ -116,12 +117,40 @@ namespace NoteDebrisRedux.Settings
 		{
 			get
 			{
-				return config.GetFloat(section, debrisLifetime, 1f, true);
+				return config.GetFloat(sectionOne, debrisLifetime, 1f, true);
 			}
 			set
 			{
-				config.SetFloat(section, debrisLifetime, value);
+				config.SetFloat(sectionOne, debrisLifetime, value);
 			}
 		}
+
+		static readonly string noteLogCapacity = "NoteLogCapacity";
+		internal static float NoteLogCapacity
+		{
+
+			get
+			{
+				return config.GetFloat(sectionThree, noteLogCapacity, 1f, true);
+			}
+			set
+			{
+				config.SetFloat(sectionThree, noteLogCapacity, value);
+			}
+		}
+
+		//static readonly string setting = " ";
+		//internal static float var
+		//{
+
+		//	get
+		//	{
+		//		return config.GetFloat(sectionOne, setting, 1f, true);
+		//	}
+		//	set
+		//	{
+		//		config.SetFloat(sectionOne, setting, value);
+		//	}
+		//}
 	}
 }
