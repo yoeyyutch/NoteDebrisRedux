@@ -10,12 +10,12 @@ namespace NoteDebrisRedux
 	[HarmonyPatch("Init")]
 	class NoteDebrisPatch
 	{
-		public static void Prefix(ref Transform initTransform, ref Vector3 cutPoint, ref Vector3 force, ref float lifetime)
+		public static void Prefix(ref Transform initTransform, ref Vector3 cutPoint, ref Vector3 force, ref float lifeTime)
 		{
 			if (Plugin.UsingNCM)
 			{
 
-				lifetime = lifetime - Mathf.Clamp(initTransform.position.y - 1f, 0f, 0.5f);
+				lifeTime = lifeTime - Mathf.Clamp(initTransform.position.y - 1f, 0f, 0.5f);
 
 				float minForce = 2f;
 				float maxForce = 8f;
@@ -71,7 +71,7 @@ namespace NoteDebrisRedux
 
 				force = newForce;
 
-				lifetime = Plugin.DebrisLifetime;
+				lifeTime = Plugin.DebrisLifetime;
 			}
 
 
