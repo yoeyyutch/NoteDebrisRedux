@@ -11,38 +11,27 @@ namespace NoteDebrisRedux.Settings
 		static BS_Utils.Utilities.Config config;
 
 		static readonly string configName = "NoteDebrisRedux";
-		static readonly string sectionOne = "NoteCutMinimizerSettings";
-		static readonly string sectionTwo = "NoteDebrisReduxSettings";
-		static readonly string sectionThree = "DebugSettings";
+		static readonly string sectionNCM = "NoteCutMinimizerSettings";
+		static readonly string sectionMain = "NoteDebrisReduxSettings";
+		static readonly string sectionDebug = "DebugSettings";
 
 		internal static void Init()
 		{
 			config = new BS_Utils.Utilities.Config(configName);
 		}
 
-		//static readonly string modEnabled = "EnableMod";
-		//internal static bool ModEnabled
-		//{
-		//	get
-		//	{
-		//		return config.GetBool(section, modEnabled, true, false);
-		//	}
-		//	set
-		//	{
-		//		config.SetBool(section, modEnabled, value);
-		//	}
-		//}
+		#region NCMsettings
 
 		static readonly string useNcmMode = "UseNoteCutMinimizerSettings";
 		internal static bool UsingNCM
 		{
 			get
 			{
-				return config.GetBool(sectionOne, useNcmMode, false, true);
+				return config.GetBool(sectionNCM, useNcmMode, false, true);
 			}
 			set
 			{
-				config.SetBool(sectionOne, useNcmMode, value);
+				config.SetBool(sectionNCM, useNcmMode, value);
 			}
 		}
 
@@ -51,11 +40,11 @@ namespace NoteDebrisRedux.Settings
 		{
 			get
 			{
-				return config.GetFloat(sectionOne, ncmForceMultiplier, 2f, true);
+				return config.GetFloat(sectionNCM, ncmForceMultiplier, 2f, true);
 			}
 			set
 			{
-				config.SetFloat(sectionOne, ncmForceMultiplier, value);
+				config.SetFloat(sectionNCM, ncmForceMultiplier, value);
 			}
 		}
 
@@ -64,25 +53,27 @@ namespace NoteDebrisRedux.Settings
 		{
 			get
 			{
-				return config.GetFloat(sectionOne, ncmDebrisLifetime, 1f, true);
+				return config.GetFloat(sectionNCM, ncmDebrisLifetime, 1f, true);
 			}
 			set
 			{
-				config.SetFloat(sectionOne, ncmDebrisLifetime, value);
+				config.SetFloat(sectionNCM, ncmDebrisLifetime, value);
 			}
 		}
 
+		#endregion
 
+		#region MainSettings
 		static readonly string velocityMultiplierX = "VelocityMultiplierX";
 		internal static float VelocityMultiplierX
 		{
 			get
 			{
-				return config.GetFloat(sectionOne, velocityMultiplierX, 2.0f, true);
+				return config.GetFloat(sectionMain, velocityMultiplierX, 2.0f, true);
 			}
 			set
 			{
-				config.SetFloat(sectionOne, velocityMultiplierX, value);
+				config.SetFloat(sectionMain, velocityMultiplierX, value);
 			}
 		}
 
@@ -91,11 +82,11 @@ namespace NoteDebrisRedux.Settings
 		{
 			get
 			{
-				return config.GetFloat(sectionOne, velocityMultiplierY, 2.0f, true);
+				return config.GetFloat(sectionMain, velocityMultiplierY, 2.0f, true);
 			}
 			set
 			{
-				config.SetFloat(sectionOne, velocityMultiplierZ, value);
+				config.SetFloat(sectionMain, velocityMultiplierZ, value);
 			}
 		}
 
@@ -104,38 +95,40 @@ namespace NoteDebrisRedux.Settings
 		{
 			get
 			{
-				return config.GetFloat(sectionOne, velocityMultiplierZ, 2.0f, true);
+				return config.GetFloat(sectionMain, velocityMultiplierZ, -2.0f, true);
 			}
 			set
 			{
-				config.SetFloat(sectionOne, velocityMultiplierZ, value);
+				config.SetFloat(sectionMain, velocityMultiplierZ, value);
 			}
 		}
 
-		static readonly string debrisLifetime = "DebrisLifetime";
-		internal static float DebrisLifetime
+		static readonly string debrisMaxLifetime = "DebrisMaxLifetime";
+		internal static float DebrisMaxLifetime
 		{
 			get
 			{
-				return config.GetFloat(sectionOne, debrisLifetime, 1f, true);
+				return config.GetFloat(sectionMain, debrisMaxLifetime, 1f, true);
 			}
 			set
 			{
-				config.SetFloat(sectionOne, debrisLifetime, value);
+				config.SetFloat(sectionMain, debrisMaxLifetime, value);
 			}
 		}
+		#endregion
 
-		static readonly string noteLogCapacity = "NoteLogCapacity";
-		internal static float NoteLogCapacity
+
+		static readonly string debrisLogCapacity = "NoteLogCapacity";
+		internal static int DebrisLogCapacity
 		{
 
 			get
 			{
-				return config.GetFloat(sectionThree, noteLogCapacity, 1f, true);
+				return config.GetInt(sectionDebug, debrisLogCapacity, 100, true);
 			}
 			set
 			{
-				config.SetFloat(sectionThree, noteLogCapacity, value);
+				config.GetInt(sectionDebug, debrisLogCapacity, value);
 			}
 		}
 

@@ -12,6 +12,12 @@ namespace NoteDebrisRedux
 	{
 		public static void Prefix(ref Transform initTransform, ref Vector3 cutPoint, ref Vector3 force, ref float lifeTime)
 		{
+			Vector3 forceIn = force;
+			float lifeTimeIn = lifeTime;
+			var note = initTransform.parent.GetComponent<NoteController>();
+
+			
+
 			if (Plugin.UsingNCM)
 			{
 
@@ -27,9 +33,6 @@ namespace NoteDebrisRedux
 
 
 				force.y = Random.Range(-2f * forceMultiplier, -0.15f * forceMultiplier);
-
-
-				var note = initTransform.parent.GetComponent<NoteController>();
 
 				if (note)
 				{
@@ -60,18 +63,28 @@ namespace NoteDebrisRedux
 
 			else
 			{
+				float life = Plugin.DebrisMaxLifetime;
+				life = Mathf.Abs((int)note.noteData.noteLineLayer - 1) > 0 ? life : life * 0.5f;
+				life = Mathf.Abs((float)note.noteData.lineIndex - 1.5f) > 1f ? life : life * 0.5f;
 
-				float fx = Mathf.Abs(force.x) > Mathf.Abs(force.y) ? force.x * Plugin.VelocityMultiplierX : 1f;
-				float fy = Mathf.Abs(force.y) > Mathf.Abs(force.x) ? force.y * Plugin.VelocityMultiplierY : 1f;
-				float fz = force.z * Plugin.VelocityMultiplierZ;
+				float fx = Mathf.Abs(force.x) > Mathf.Abs(force.y) ? force.x * Plugin.VelocityMultiplierX : force.x;
+				float fy = Mathf.Abs(force.y) > Mathf.Abs(force.x) ? force.y * Plugin.VelocityMultiplierY : force.y;
+				float fz = force.z *((float)note.noteData.noteLineLayer + 0.5f) * Plugin.VelocityMultiplierZ;
 
 				Vector3 newForce = new Vector3(fx, fy, fz);
 
 				//Vector3 newForce = new Vector3(Plugin.VelocityMultiplierX * force.x, Plugin.VelocityMultiplierY * force.y, Plugin.VelocityMultiplierZ * force.z);
 
+				lifeTime = life;
 				force = newForce;
 
-				lifeTime = Plugin.DebrisLifetime;
+				if (note.noteData.id < Plugin.DebrisLogCapacity)
+				{
+					Logger.LogDebrisData("I:", note.noteData, forceIn, lifeTimeIn);
+					Logger.LogDebrisData("O:", note.noteData, force, lifeTime);
+				}
+
+
 			}
 
 

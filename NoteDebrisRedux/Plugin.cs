@@ -14,7 +14,7 @@ namespace NoteDebrisRedux
 	public class Plugin
 	{
 		internal static string PluginName => "NoteDebrisRedux";
-		public string Version => "1.3.0";
+		public string Version => "1.3.2";
 		internal const string HARMONYID = "com.yoeyyutch.BeatSaber.NoteDebrisRedux";
 
 		internal static bool harmonyPatchesLoaded = false;
@@ -28,38 +28,38 @@ namespace NoteDebrisRedux
 		public static float VelocityMultiplierX;
 		public static float VelocityMultiplierY;
 		public static float VelocityMultiplierZ;
-		public static float DebrisLifetime;
+		public static float DebrisMaxLifetime;
+		public static int DebrisLogCapacity;
 
 		[Init]
 		public void Init(IPALogger logger)
 		{
 			Config.Init();
-			Logger.Log = logger;
-
+			Logger.log = logger;
 		}
 
 		public void LoadConfig()
 		{
+			// NoteCutMinimizer settings
 			UsingNCM = Config.UsingNCM;
 			NcmForceMultiplier = Config.NcmForceMultiplier;
 			NcmDebrisLifetime = Config.NcmDebrisLifetime;
-
+			// NoteDebrisRedux settings
 			VelocityMultiplierX = Config.VelocityMultiplierX;
 			VelocityMultiplierY = Config.VelocityMultiplierY;
 			VelocityMultiplierZ = Config.VelocityMultiplierZ;
-			DebrisLifetime = Config.DebrisLifetime;
+			DebrisMaxLifetime = Config.DebrisMaxLifetime;
+			// Other settings/debugging
+			DebrisLogCapacity = Config.DebrisLogCapacity;
 
-			Logger.Log.Info("Config Loaded");
-			Logger.Log.Info("X = " + VelocityMultiplierX.ToString());
-			Logger.Log.Info("Y = " + VelocityMultiplierY.ToString());
-			Logger.Log.Info("Z = " + VelocityMultiplierZ.ToString());
-			Logger.Log.Info("L = " + DebrisLifetime.ToString());
+			Logger.log.Info("Config Loaded");
+
 		}
 
 		[OnStart]
 		public void OnApplicationStart()
 		{
-			Logger.Log.Info("Starting...");
+			Logger.log.Info("Starting...");
 			LoadConfig();
 			BS_Utils.Utilities.BSEvents.gameSceneLoaded += LoadConfig;
 			LoadHarmonyPatches();
@@ -70,7 +70,7 @@ namespace NoteDebrisRedux
 		public void OnApplicationExit()
 		{
 			UnloadHarmonyPatches();
-			Logger.Log.Info("Exiting...");
+			Logger.log.Info("Exiting...");
 		}
 
 		internal void LoadHarmonyPatches()
@@ -83,12 +83,12 @@ namespace NoteDebrisRedux
 			try
 			{
 				harmonyInstance.PatchAll(Assembly.GetExecutingAssembly());
-				Logger.Log.Info("Harmony patches loaded");
+				Logger.log.Info("Harmony patches loaded");
 			}
 			catch (Exception e)
 			{
-				Logger.Log.Error("Harmony failed to load");
-				Logger.Log.Error(e.ToString());
+				Logger.log.Error("Harmony failed to load");
+				Logger.log.Error(e.ToString());
 			}
 			harmonyPatchesLoaded = true;
 		}
@@ -102,12 +102,12 @@ namespace NoteDebrisRedux
 			try
 			{
 				harmonyInstance.UnpatchAll(HARMONYID);
-				Logger.Log.Info("Harmony patches unloaded");
+				Logger.log.Info("Harmony patches unloaded");
 			}
 			catch (Exception e)
 			{
-				Logger.Log.Error("Harmony failed to unload");
-				Logger.Log.Error(e.ToString());
+				Logger.log.Error("Harmony failed to unload");
+				Logger.log.Error(e.ToString());
 			}
 			harmonyPatchesLoaded = false;
 		}
