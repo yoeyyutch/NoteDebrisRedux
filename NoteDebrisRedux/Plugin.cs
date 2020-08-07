@@ -5,7 +5,8 @@ using System.Reflection;
 using UnityEngine.SceneManagement;
 using IPALogger = IPA.Logging.Logger;
 using HarmonyLib;
-using NoteDebrisRedux.Settings;
+using UnityEngine;
+using System.IO;
 
 namespace NoteDebrisRedux
 {
@@ -14,22 +15,32 @@ namespace NoteDebrisRedux
 	public class Plugin
 	{
 		internal static string PluginName => "NoteDebrisRedux";
+		readonly string songStatsDirectory = Path.Combine(UnityGame.UserDataPath, PluginName);
 		public string Version => "1.3.2";
+
+
+
 		internal const string HARMONYID = "com.yoeyyutch.BeatSaber.NoteDebrisRedux";
 
 		internal static bool harmonyPatchesLoaded = false;
 
 		internal static readonly Harmony harmonyInstance = new Harmony(HARMONYID);
 
-		public static bool UsingNCM;
-		public static float NcmForceMultiplier;
-		public static float NcmDebrisLifetime;
+		//public static Vector3 DebrisForceMultiplier { get; private set; } = new Vector3(Config.VelocityMultiplierX, Config.VelocityMultiplierY, Config.VelocityMultiplierZ);
 
-		public static float VelocityMultiplierX;
-		public static float VelocityMultiplierY;
-		public static float VelocityMultiplierZ;
-		public static float DebrisMaxLifetime;
-		public static int DebrisLogCapacity;
+
+		public static bool ModEnabled { get; private set; } = Config.MODENABLED;
+		public static float DebrisForceX { get; private set; } = Config.Xs;
+		public static float DebrisForceY { get; private set; } = Config.SetForceY;
+		public static float DebrisForceZ { get; private set; } = Config.SetForceZ;
+		public static float DebrisMaxLifetime { get; private set; } = Config.SetLifetime;
+
+		public static bool NCMenabled { get; private set; } = Config.SetNCMenabled;
+		public static float NcmForceMultiplier { get; private set; } = Config.SetNcmForceMultiplier;
+		public static float NcmDebrisLifetime { get; private set; } = Config.SetNcmDebrisLifetime;
+
+		public static bool DebuggingEnabled { get; private set; } = Config.SetDebuggingEnabled;
+		public static int DebugLogCapacity { get; private set; } = Config.SetDebrisLogCapacity;
 
 		[Init]
 		public void Init(IPALogger logger)
@@ -38,19 +49,23 @@ namespace NoteDebrisRedux
 			Logger.log = logger;
 		}
 
-		public void LoadConfig()
+		private void LoadConfig()
 		{
+			// Main settings
+			ModEnabled = Config.MODENABLED;
+			DebrisForceX = Config.Xs;
+			DebrisForceY = Config.SetForceY;
+			DebrisForceZ = Config.SetForceZ;
+			DebrisMaxLifetime = Config.SetLifetime;
+
 			// NoteCutMinimizer settings
-			UsingNCM = Config.UsingNCM;
-			NcmForceMultiplier = Config.NcmForceMultiplier;
-			NcmDebrisLifetime = Config.NcmDebrisLifetime;
-			// NoteDebrisRedux settings
-			VelocityMultiplierX = Config.VelocityMultiplierX;
-			VelocityMultiplierY = Config.VelocityMultiplierY;
-			VelocityMultiplierZ = Config.VelocityMultiplierZ;
-			DebrisMaxLifetime = Config.DebrisMaxLifetime;
+			NCMenabled = Config.SetNCMenabled;
+			NcmForceMultiplier = Config.SetNcmForceMultiplier;
+			NcmDebrisLifetime = Config.SetNcmDebrisLifetime;
+
 			// Other settings/debugging
-			DebrisLogCapacity = Config.DebrisLogCapacity;
+			DebuggingEnabled = Config.SetDebuggingEnabled;
+			DebugLogCapacity = Config.SetDebrisLogCapacity;
 
 			Logger.log.Info("Config Loaded");
 
