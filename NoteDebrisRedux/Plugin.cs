@@ -15,7 +15,7 @@ namespace NoteDebrisRedux
 	public class Plugin
 	{
 		internal static string PluginName => "NoteDebrisRedux";
-		internal string Version => "1.3.4";
+		public static string Version => "1.3.4";
 
 		internal const string HARMONYID = "com.yoeyyutch.BeatSaber.NoteDebrisRedux";
 		internal static bool harmonyPatchesLoaded = false;
@@ -26,12 +26,14 @@ namespace NoteDebrisRedux
 		{
 			Config.Init();
 			Logger.log = logger;
-			NoteDebris.LoadDebrisMods();
+			CustomNoteDebris.Load();
+
 		}
 
 		[OnStart]
 		public void OnApplicationStart()
 		{
+			Logger.log.Info("Starting...");
 			UnloadEvents();
 			LoadEvents();
 			LoadHarmonyPatches();
@@ -46,7 +48,8 @@ namespace NoteDebrisRedux
 
 		public void OnGameSceneLoaded()
 		{
-			NoteDebris.LoadDebrisMods();
+			Logger.log.Info("OnGameSceneLoaded called.");
+			CustomNoteDebris.Load();
 		}
 
 		internal void LoadEvents()

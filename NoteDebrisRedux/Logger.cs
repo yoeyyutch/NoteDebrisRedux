@@ -20,7 +20,7 @@ namespace NoteDebrisRedux
 			string force = "D: " + debrisforce.ToString("F3");
 			string life = "L: " + lifeTime.ToString("0.000");
 			string normal = "N: " + cutNormal.ToString("F2");
-			log.Info(string.Join(", ", noteID, force, normal, direction, life));
+			log.Info(string.Join(", ", noteID, force, normal, direction, life, nextNoteTime));
 		}
 
 		public static void DebugSwing(NoteController note, Vector3 cutPoint, Vector3 cutNormal, Vector3 debrisForce)

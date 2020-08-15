@@ -14,35 +14,40 @@ namespace NoteDebrisRedux
 		{
 			//float cutDistanceToCenter = Mathf.Abs(Vector3.Distance(initTransform.position, cutPoint));
 
-			NoteController note = initTransform.parent.GetComponent<NoteController>();
-			float nextNoteTime = note.noteData.timeToNextBasicNote;
-			float prevNoteTime = note.noteData.timeToPrevBasicNote;
-			Vector3 initForce = force;
+			NoteData noteData = initTransform.parent.GetComponent<NoteController>().noteData;
+			float nextNoteTime = noteData.timeToNextBasicNote;
+			//float prevNoteTime = noteData.timeToPrevBasicNote;
+			Vector3 initForce = new Vector3(force.x,force.y,Mathf.Abs(force.z));
 			float initLifeTime = lifeTime;
-			float p = lifeTime / 1.5f;
+			//float p = lifeTime / 1.5f;
+			
 
 			if (noteType == NoteType.NoteA)
 			{
-				force = Vector3.Scale(initForce, NoteDebris.LeftForce);
+				force = Vector3.Scale(initForce, CustomNoteDebris.LeftForce);
 				//force = Vector3.Scale(initForce, Plugin.LeftForce);
-				lifeTime = NoteDebris.LeftLifeMax * p;
+				lifeTime = Mathf.Clamp(nextNoteTime,0.1f, CustomNoteDebris.LeftLifeMax);
 			}
 
 			else if (noteType == NoteType.NoteB)
 			{
 				//force = Vector3.Scale(initForce, Plugin.RightForce);
-				force = Vector3.Scale(initForce, NoteDebris.RightForce);
-				lifeTime = NoteDebris.RightLifeMax * p;
+				force = Vector3.Scale(initForce, CustomNoteDebris.RightForce);
+				lifeTime = Mathf.Clamp(nextNoteTime, 0.1f, CustomNoteDebris.RightLifeMax);
+
 			}
+
+
 			else
 			{
+				lifeTime = initLifeTime;
 				force = initForce;
 			}
 
-			if (note.noteData.id < 10)
+			if (noteData.id < 10)
 			{
-				Logger.LogDebrisData(note.noteData, initForce, initLifeTime, cutNormal);
-				Logger.LogDebrisData(note.noteData, force, lifeTime, cutNormal);
+				Logger.LogDebrisData(noteData, initForce, initLifeTime, cutNormal);
+				Logger.LogDebrisData(noteData, force, lifeTime, cutNormal);
 			}
 		}
 	}

@@ -19,7 +19,6 @@ namespace NoteDebrisRedux
 		internal static void Init()
 		{
 			config = new BS_Utils.Utilities.Config(Plugin.PluginName);
-			CopyLeftDebrisSettings();
 
 		}
 
@@ -53,7 +52,7 @@ namespace NoteDebrisRedux
 		{
 			get
 			{
-				return config.GetFloat(leftSaberSettings, "ForceMultiplierX", 2.0f, true);
+				return config.GetFloat(leftSaberSettings, "ForceMultiplierX", 3.0f, true);
 			}
 			set
 			{
@@ -75,7 +74,7 @@ namespace NoteDebrisRedux
 		{
 			get
 			{
-				return config.GetFloat(leftSaberSettings, "ForceMultiplierZ", 2.0f, true);
+				return config.GetFloat(leftSaberSettings, "ForceMultiplierZ", -2.0f, true);
 			}
 			set
 			{
@@ -158,18 +157,7 @@ namespace NoteDebrisRedux
 		}
 		#endregion
 
-		internal static void CopyLeftDebrisSettings()
-		{
-			if (!COPYLTOR)
-				return;
-			else
-			{
-				XR = XL;
-				YR = YL;
-				ZR = ZL;
-				LIFER = LIFEL;
-			}
-		}
+
 	}
 }
 
