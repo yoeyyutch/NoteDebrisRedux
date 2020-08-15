@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿//using System;
+//using System.Collections.Generic;
+//using System.Linq;
+//using System.Text;
+//using System.Threading.Tasks;
 
 namespace NoteDebrisRedux
 {
@@ -10,158 +10,164 @@ namespace NoteDebrisRedux
 	{
 		static BS_Utils.Utilities.Config config;
 
-		static readonly string modSettings = "ModSettings";
-		static readonly string leftSaberSettings = "LeftSaberSettings";
-		static readonly string rightSaberSettings = "RightSaberSettings";
+
+		static readonly string NoteDebrisSettings = "NoteDebrisSettings";
 
 
 
 		internal static void Init()
 		{
 			config = new BS_Utils.Utilities.Config(Plugin.PluginName);
-
 		}
 
-		internal static bool COPYLTOR
+		internal static bool _enableMod
 		{
 			get
 			{
-				return config.GetBool(modSettings, "UseLeftSettingsForBothSabers", false, true);
+				return config.GetBool(NoteDebrisSettings, "ModifyNoteDebris", true, true);
 			}
-
 			set
 			{
-				config.SetBool(modSettings, "UseLeftSettingsForBothSabers", value);
+				config.SetBool(NoteDebrisSettings, "ModifyNoteDebris", value);
 			}
 		}
-		//_____________________________________________________
-
-		#region LeftSaberDebrisSettings
-		internal static bool MODL
+		internal static float _forceX
 		{
 			get
 			{
-				return config.GetBool(leftSaberSettings, "ModLeftSaberDebris", true, true);
+				return config.GetFloat(NoteDebrisSettings, "ForceMultiplierX", 3.0f, true);
 			}
 			set
 			{
-				config.SetBool(leftSaberSettings, "MOdLeftSaberDebris", value);
+				config.SetFloat(NoteDebrisSettings, "ForceMultiplierX", value);
 			}
 		}
-		internal static float XL
+		internal static float _forceY
 		{
 			get
 			{
-				return config.GetFloat(leftSaberSettings, "ForceMultiplierX", 3.0f, true);
+				return config.GetFloat(NoteDebrisSettings, "ForceMultiplierY", 2.0f, true);
 			}
 			set
 			{
-				config.SetFloat(leftSaberSettings, "ForceMultiplierX", value);
+				config.SetFloat(NoteDebrisSettings, "ForceMultiplierY", value);
 			}
 		}
-		internal static float YL
+		internal static float _forceZ
 		{
 			get
 			{
-				return config.GetFloat(leftSaberSettings, "ForceMultiplierY", 2.0f, true);
+				return config.GetFloat(NoteDebrisSettings, "ForceMultiplierZ", -2.0f, true);
 			}
 			set
 			{
-				config.SetFloat(leftSaberSettings, "ForceMultiplierY", value);
+				config.SetFloat(NoteDebrisSettings, "ForceMultiplierZ", value);
 			}
 		}
-		internal static float ZL
+		internal static float _lifeMax
 		{
 			get
 			{
-				return config.GetFloat(leftSaberSettings, "ForceMultiplierZ", -2.0f, true);
+				return config.GetFloat(NoteDebrisSettings, "MaxDebrisLifetime", 1f, true);
 			}
 			set
 			{
-				config.SetFloat(leftSaberSettings, "ForceMultiplierZ", value);
+				config.SetFloat(NoteDebrisSettings, "MaxDebrisLIfetime", value);
 			}
 		}
-		internal static float LIFEL
+		internal static float _lifeTimePercentOfNoteInterval
 		{
 			get
 			{
-				return config.GetFloat(leftSaberSettings, "MaxDebrisLifetime", 1f, true);
+				return config.GetFloat(NoteDebrisSettings, "lifeTimePercentOfNoteInterval", 1f, true);
 			}
 			set
 			{
-				config.SetFloat(leftSaberSettings, "MaxDebrisLIfetime", value);
+				config.SetFloat(NoteDebrisSettings, "lifeTimePercentOfNoteInterval", value);
 			}
 		}
-		#endregion
-		//_______________________________________________
-
-		#region RightSaberDebrisSettings
-
-		internal static bool MODR
-		{
-			get
-			{
-				return config.GetBool(rightSaberSettings, "ModEnabled", true, true);
-			}
-			set
-			{
-				config.SetBool(rightSaberSettings, "ModEnabled", value);
-			}
-		}
-		internal static float XR
-		{
-			get
-			{
-				return config.GetFloat(rightSaberSettings, "ForceMultiplierX", 2.0f, true);
-			}
-
-			set
-			{
-				config.SetFloat(rightSaberSettings, "ForceMultiplierX", value);
-			}
-		}
-		internal static float YR
-		{
-			get
-			{
-				return config.GetFloat(rightSaberSettings, "ForceMultiplierY", 2.0f, true);
-			}
-			set
-			{
-
-				config.SetFloat(rightSaberSettings, "ForceMultiplierY", value);
-			}
-		}
-		internal static float ZR
-		{
-			get
-			{
-				return config.GetFloat(rightSaberSettings, "ForceMultiplierZ",2.0f, true);
-			}
-			set
-			{
-
-				config.SetFloat(rightSaberSettings, "ForceMultiplierZ", value);
-			}
-		}
-		internal static float LIFER
-		{
-			get
-			{
-				return config.GetFloat(rightSaberSettings, "DebrisMaxLifetime", 1f, true);
-			}
-			set
-			{
-				config.SetFloat(rightSaberSettings, "DebrisMaxLifetime", value);
-			}
-		}
-		#endregion
-
-
 	}
 }
 
 
+//static readonly string rightSaberSettings = "RightSaberSettings";
+
+//internal static bool MODR
+//{
+//	get
+//	{
+//		return config.GetBool(rightSaberSettings, "ModEnabled", true, true);
+//	}
+//	set
+//	{
+//		config.SetBool(rightSaberSettings, "ModEnabled", value);
+//	}
+//}
+//internal static float XR
+//{
+//	get
+//	{
+//		return config.GetFloat(rightSaberSettings, "ForceMultiplierX", 2.0f, true);
+//	}
+
+//	set
+//	{
+//		config.SetFloat(rightSaberSettings, "ForceMultiplierX", value);
+//	}
+//}
+//internal static float YR
+//{
+//	get
+//	{
+//		return config.GetFloat(rightSaberSettings, "ForceMultiplierY", 2.0f, true);
+//	}
+//	set
+//	{
+
+//		config.SetFloat(rightSaberSettings, "ForceMultiplierY", value);
+//	}
+//}
+//internal static float ZR
+//{
+//	get
+//	{
+//		return config.GetFloat(rightSaberSettings, "ForceMultiplierZ",2.0f, true);
+//	}
+//	set
+//	{
+
+//		config.SetFloat(rightSaberSettings, "ForceMultiplierZ", value);
+//	}
+//}
+//internal static float LIFER
+//{
+//	get
+//	{
+//		return config.GetFloat(rightSaberSettings, "DebrisMaxLifetime", 1f, true);
+//	}
+//	set
+//	{
+//		config.SetFloat(rightSaberSettings, "DebrisMaxLifetime", value);
+//	}
+//}
+
+
+
+
+
+//internal static bool COPYLTOR
+//{
+//	get
+//	{
+//		return config.GetBool(modSettings, "UseLeftSettingsForBothSabers", false, true);
+//	}
+
+//	set
+//	{
+//		config.SetBool(modSettings, "UseLeftSettingsForBothSabers", value);
+//	}
+//}
+//_____________________________________________________
 //static readonly string sectionNCM = "NoteCutMinimizerSettings";
 //static readonly string _info = "DebugSettings";
 

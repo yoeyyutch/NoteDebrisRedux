@@ -15,7 +15,7 @@ namespace NoteDebrisRedux
 	public class Plugin
 	{
 		internal static string PluginName => "NoteDebrisRedux";
-		public static string Version => "1.3.4";
+		public static string Version => "1.3.5";
 
 		internal const string HARMONYID = "com.yoeyyutch.BeatSaber.NoteDebrisRedux";
 		internal static bool harmonyPatchesLoaded = false;

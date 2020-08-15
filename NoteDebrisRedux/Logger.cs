@@ -8,7 +8,7 @@ namespace NoteDebrisRedux
     {
         public static IPALogger log { get; set; }
 
-		public static void LogDebrisData(NoteData noteData, Vector3 debrisforce, float lifeTime, Vector3 cutNormal)
+		public static void LogDebrisData(string msg, NoteData noteData, Vector3 debrisforce, float lifeTime, Vector3 cutNormal)
 		{
 
 			string noteID = "ID: " + noteData.id.ToString();
@@ -17,10 +17,10 @@ namespace NoteDebrisRedux
 			//int level = (int)noteData.noteLineLayer;
 			//string pos = "(" + lane + ", " + level + ")";
 			string direction = noteData.cutDirection.ToString();
-			string force = "D: " + debrisforce.ToString("F3");
-			string life = "L: " + lifeTime.ToString("0.000");
+			string force = "D: " + debrisforce.ToString("F2");
+			string life = "L: " + lifeTime.ToString("0.0");
 			string normal = "N: " + cutNormal.ToString("F2");
-			log.Info(string.Join(", ", noteID, force, normal, direction, life, nextNoteTime));
+			log.Info(string.Join(", ", msg, noteID, direction, force, normal, life));
 		}
 
 		public static void DebugSwing(NoteController note, Vector3 cutPoint, Vector3 cutNormal, Vector3 debrisForce)

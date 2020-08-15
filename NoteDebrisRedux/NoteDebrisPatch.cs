@@ -12,46 +12,57 @@ namespace NoteDebrisRedux
 	{
 		public static void Prefix(NoteType noteType, Transform initTransform, Vector3 cutPoint, Vector3 cutNormal, ref Vector3 force, ref float lifeTime)
 		{
-			//float cutDistanceToCenter = Mathf.Abs(Vector3.Distance(initTransform.position, cutPoint));
-
-			NoteData noteData = initTransform.parent.GetComponent<NoteController>().noteData;
-			float nextNoteTime = noteData.timeToNextBasicNote;
-			//float prevNoteTime = noteData.timeToPrevBasicNote;
-			Vector3 initForce = new Vector3(force.x,force.y,Mathf.Abs(force.z));
-			float initLifeTime = lifeTime;
-			//float p = lifeTime / 1.5f;
-			
-
-			if (noteType == NoteType.NoteA)
+			if (!CustomNoteDebris._modifyDebris)
 			{
-				force = Vector3.Scale(initForce, CustomNoteDebris.LeftForce);
-				//force = Vector3.Scale(initForce, Plugin.LeftForce);
-				lifeTime = Mathf.Clamp(nextNoteTime,0.1f, CustomNoteDebris.LeftLifeMax);
+				return;
 			}
-
-			else if (noteType == NoteType.NoteB)
-			{
-				//force = Vector3.Scale(initForce, Plugin.RightForce);
-				force = Vector3.Scale(initForce, CustomNoteDebris.RightForce);
-				lifeTime = Mathf.Clamp(nextNoteTime, 0.1f, CustomNoteDebris.RightLifeMax);
-
-			}
-
 
 			else
 			{
-				lifeTime = initLifeTime;
-				force = initForce;
-			}
+				NoteData noteData = initTransform.parent.GetComponent<NoteController>().noteData;
+				Vector3 initForce = new Vector3(force.x, force.y, Mathf.Abs(force.z));
+				float nextNoteTime = noteData.timeToNextBasicNote;
 
-			if (noteData.id < 10)
-			{
-				Logger.LogDebrisData(noteData, initForce, initLifeTime, cutNormal);
-				Logger.LogDebrisData(noteData, force, lifeTime, cutNormal);
+				if (noteData.id < 10)
+				{
+					Logger.LogDebrisData("In :", noteData, force, lifeTime, cutNormal);
+				}
+
+				lifeTime = Mathf.Clamp(nextNoteTime, 0.1f, CustomNoteDebris.LifeTimeMax);
+				force = Vector3.Scale(initForce, CustomNoteDebris.ForceMultiplier);
+
+				if (noteData.id < 10)
+				{
+					Logger.LogDebrisData("Out:", noteData, force, lifeTime, cutNormal);
+				}
 			}
 		}
 	}
 }
+
+
+
+//else
+//{
+//	lifeTime = initLifeTime;
+//	force = initForce;
+//}
+//float cutDistanceToCenter = Mathf.Abs(Vector3.Distance(initTransform.position, cutPoint));
+//if (noteData.id < 10)
+//{
+//	Logger.LogDebrisData(noteData, initForce, initLifeTime, cutNormal);
+//	Logger.LogDebrisData(noteData, force, lifeTime, cutNormal);
+//}
+
+
+
+//else if (noteType == NoteType.NoteB)
+//{
+//	//force = Vector3.Scale(initForce, Plugin.RightForce);
+//	force = Vector3.Scale(initForce, CustomNoteDebris.RightForce);
+//	lifeTime = Mathf.Clamp(nextNoteTime, 0.1f, CustomNoteDebris.RightLifeMax);
+
+//}
 
 //			if(!Plugin.LeftEnabled && !Plugin.RightEnabled)
 //			{
