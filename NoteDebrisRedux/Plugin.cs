@@ -15,77 +15,50 @@ namespace NoteDebrisRedux
 	public class Plugin
 	{
 		internal static string PluginName => "NoteDebrisRedux";
-		readonly string songStatsDirectory = Path.Combine(UnityGame.UserDataPath, PluginName);
-		public string Version => "1.3.2";
-
-
+		internal string Version => "1.3.4";
 
 		internal const string HARMONYID = "com.yoeyyutch.BeatSaber.NoteDebrisRedux";
-
 		internal static bool harmonyPatchesLoaded = false;
-
 		internal static readonly Harmony harmonyInstance = new Harmony(HARMONYID);
-
-		//public static Vector3 DebrisForceMultiplier { get; private set; } = new Vector3(Config.VelocityMultiplierX, Config.VelocityMultiplierY, Config.VelocityMultiplierZ);
-
-
-		public static bool ModEnabled { get; private set; } = Config.MODENABLED;
-		public static float DebrisForceX { get; private set; } = Config.Xs;
-		public static float DebrisForceY { get; private set; } = Config.SetForceY;
-		public static float DebrisForceZ { get; private set; } = Config.SetForceZ;
-		public static float DebrisMaxLifetime { get; private set; } = Config.SetLifetime;
-
-		public static bool NCMenabled { get; private set; } = Config.SetNCMenabled;
-		public static float NcmForceMultiplier { get; private set; } = Config.SetNcmForceMultiplier;
-		public static float NcmDebrisLifetime { get; private set; } = Config.SetNcmDebrisLifetime;
-
-		public static bool DebuggingEnabled { get; private set; } = Config.SetDebuggingEnabled;
-		public static int DebugLogCapacity { get; private set; } = Config.SetDebrisLogCapacity;
 
 		[Init]
 		public void Init(IPALogger logger)
 		{
 			Config.Init();
 			Logger.log = logger;
-		}
-
-		private void LoadConfig()
-		{
-			// Main settings
-			ModEnabled = Config.MODENABLED;
-			DebrisForceX = Config.Xs;
-			DebrisForceY = Config.SetForceY;
-			DebrisForceZ = Config.SetForceZ;
-			DebrisMaxLifetime = Config.SetLifetime;
-
-			// NoteCutMinimizer settings
-			NCMenabled = Config.SetNCMenabled;
-			NcmForceMultiplier = Config.SetNcmForceMultiplier;
-			NcmDebrisLifetime = Config.SetNcmDebrisLifetime;
-
-			// Other settings/debugging
-			DebuggingEnabled = Config.SetDebuggingEnabled;
-			DebugLogCapacity = Config.SetDebrisLogCapacity;
-
-			Logger.log.Info("Config Loaded");
-
+			NoteDebris.LoadDebrisMods();
 		}
 
 		[OnStart]
 		public void OnApplicationStart()
 		{
-			Logger.log.Info("Starting...");
-			LoadConfig();
-			BS_Utils.Utilities.BSEvents.gameSceneLoaded += LoadConfig;
+			UnloadEvents();
+			LoadEvents();
 			LoadHarmonyPatches();
-
 		}
 
 		[OnExit]
 		public void OnApplicationExit()
 		{
+			UnloadEvents();
 			UnloadHarmonyPatches();
-			Logger.log.Info("Exiting...");
+		}
+
+		public void OnGameSceneLoaded()
+		{
+			NoteDebris.LoadDebrisMods();
+		}
+
+		internal void LoadEvents()
+		{
+
+			BS_Utils.Utilities.BSEvents.gameSceneLoaded += OnGameSceneLoaded;
+
+		}
+
+		internal void UnloadEvents()
+		{
+			BS_Utils.Utilities.BSEvents.gameSceneLoaded -= OnGameSceneLoaded;
 		}
 
 		internal void LoadHarmonyPatches()
@@ -128,6 +101,41 @@ namespace NoteDebrisRedux
 		}
 	}
 }
+
+//internal readonly string InfoDirectory = Path.Combine(UnityGame.UserDataPath, PluginName);
+
+//private readonly GameplayCoreSceneSetupData _sceneData;
+//public GameplayCoreSceneSetupData GetSceneData() => _sceneData;
+
+//private Info gameInfo;
+
+
+//public bool LeftEnabled { get; set; }
+//public bool RightEnabled { get; set; }
+//public static Vector3 LeftForce { get; set; }
+//public static Vector3 RightForce { get; set; }
+//public static float LeftLifeMax { get; set; }
+//public static float RightLifeMax { get; set; }
+//public static float NoteSpeed { get; set; }
+//private void LoadConfig()
+
+//{
+//	//gameInfo = null;
+//	//gameInfo = new Info();
+
+
+//	//NoteSpeed = gameInfo.NoteJumpSpeed;
+//	LeftEnabled = Config.MODL;
+//	RightEnabled = Config.MODR;
+//	Config.CopyLeftDebrisSettings();
+
+
+//	LeftForce = LeftEnabled ? new Vector3(Config.XL, Config.YL, Mathf.Abs(Config.ZL)) : Vector3.one;
+//	RightForce = RightEnabled ? new Vector3(Config.XR, Config.YR, Mathf.Abs(Config.ZR)) : Vector3.one;
+//	LeftLifeMax = LeftEnabled ? Config.LIFEL : 1.5f;
+//	RightLifeMax = RightEnabled ? Config.LIFER : 1.5f;
+
+//}
 
 //public void OnFixedUpdate()
 //      {
@@ -209,4 +217,42 @@ namespace NoteDebrisRedux
 //        Logger.Log.Error(e.ToString());
 //    }
 //    harmonyPatchesLoaded = false;
+//}
+
+//public static Vector3 DebrisForceMultiplier { get; private set; } = new Vector3(Config.VelocityMultiplierX, Config.VelocityMultiplierY, Config.VelocityMultiplierZ);
+
+
+//public static bool ModEnabled { get; private set; } = Config.IsEnabled;
+//public static float DebrisForceX { get; private set; } = Config.Xs;
+//public static float DebrisForceY { get; private set; } = Config._YForce;
+//public static float DebrisForceZ { get; private set; } = Config._ZForce;
+//public static float DebrisMaxLifetime { get; private set; } = Config._MaxLifetime;
+
+//public static bool NCMenabled { get; private set; } = Config.SetNCMenabled;
+//public static float NcmForceMultiplier { get; private set; } = Config.SetNcmForceMultiplier;
+//public static float NcmDebrisLifetime { get; private set; } = Config.SetNcmDebrisLifetime;
+
+//public static bool DebuggingEnabled { get; private set; } = Config.SetDebuggingEnabled;
+//public static int DebugLogCapacity { get; private set; } = Config.Info_LogCapacity;
+
+//private void LoadConfig()
+//{
+//	// Main settings
+//	ModEnabled = Config.IsEnabled;
+//	DebrisForceX = Config.Xs;
+//	DebrisForceY = Config._YForce;
+//	DebrisForceZ = Config._ZForce;
+//	DebrisMaxLifetime = Config._MaxLifetime;
+
+//	// NoteCutMinimizer settings
+//	NCMenabled = Config.SetNCMenabled;
+//	NcmForceMultiplier = Config.SetNcmForceMultiplier;
+//	NcmDebrisLifetime = Config.SetNcmDebrisLifetime;
+
+//	// Other settings/debugging
+//	DebuggingEnabled = Config.SetDebuggingEnabled;
+//	DebugLogCapacity = Config.Info_LogCapacity;
+
+//	Logger.log.Info("Config Loaded");
+
 //}

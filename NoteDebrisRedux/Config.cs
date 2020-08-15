@@ -9,201 +9,253 @@ namespace NoteDebrisRedux
 	static public class Config
 	{
 		static BS_Utils.Utilities.Config config;
-		private static string s_publicVariable;
-		static readonly string sectionNCM = "NoteCutMinimizerSettings";
-		static readonly string section_Main = "Settings";
-		static readonly string section_DebrisForceMultipliers = "DebrisForceMultipliers";
-		static readonly string section_DebugSettings = "DebugSettings";
+
+		static readonly string modSettings = "ModSettings";
+		static readonly string leftSaberSettings = "LeftSaberSettings";
+		static readonly string rightSaberSettings = "RightSaberSettings";
+
 
 
 		internal static void Init()
 		{
 			config = new BS_Utils.Utilities.Config(Plugin.PluginName);
+			CopyLeftDebrisSettings();
+
 		}
 
-		static public float PublicVar
+		internal static bool COPYLTOR
 		{
 			get
 			{
-				return SetLifetime;
+				return config.GetBool(modSettings, "UseLeftSettingsForBothSabers", false, true);
+			}
+
+			set
+			{
+				config.SetBool(modSettings, "UseLeftSettingsForBothSabers", value);
 			}
 		}
+		//_____________________________________________________
 
-		static public float Debris_ForceMultiplier
+		#region LeftSaberDebrisSettings
+		internal static bool MODL
 		{
 			get
 			{
-				return 1f;
+				return config.GetBool(leftSaberSettings, "ModLeftSaberDebris", true, true);
+			}
+			set
+			{
+				config.SetBool(leftSaberSettings, "MOdLeftSaberDebris", value);
 			}
 		}
-
-
-		#region MainSettings
-
-		static public bool MODENABLED
+		internal static float XL
 		{
 			get
 			{
-				return config.GetBool(section_Main, "ModEnabled", true, true);
+				return config.GetFloat(leftSaberSettings, "ForceMultiplierX", 2.0f, true);
+			}
+			set
+			{
+				config.SetFloat(leftSaberSettings, "ForceMultiplierX", value);
 			}
 		}
-
-		static public float LIFETIME
+		internal static float YL
 		{
 			get
 			{
-				return config.GetFloat(section_Main, "DebrisLifetime", 2.0f, true);
+				return config.GetFloat(leftSaberSettings, "ForceMultiplierY", 2.0f, true);
+			}
+			set
+			{
+				config.SetFloat(leftSaberSettings, "ForceMultiplierY", value);
 			}
 		}
+		internal static float ZL
+		{
+			get
+			{
+				return config.GetFloat(leftSaberSettings, "ForceMultiplierZ", 2.0f, true);
+			}
+			set
+			{
+				config.SetFloat(leftSaberSettings, "ForceMultiplierZ", value);
+			}
+		}
+		internal static float LIFEL
+		{
+			get
+			{
+				return config.GetFloat(leftSaberSettings, "MaxDebrisLifetime", 1f, true);
+			}
+			set
+			{
+				config.SetFloat(leftSaberSettings, "MaxDebrisLIfetime", value);
+			}
+		}
+		#endregion
+		//_______________________________________________
 
+		#region RightSaberDebrisSettings
+
+		internal static bool MODR
+		{
+			get
+			{
+				return config.GetBool(rightSaberSettings, "ModEnabled", true, true);
+			}
+			set
+			{
+				config.SetBool(rightSaberSettings, "ModEnabled", value);
+			}
+		}
+		internal static float XR
+		{
+			get
+			{
+				return config.GetFloat(rightSaberSettings, "ForceMultiplierX", 2.0f, true);
+			}
+
+			set
+			{
+				config.SetFloat(rightSaberSettings, "ForceMultiplierX", value);
+			}
+		}
+		internal static float YR
+		{
+			get
+			{
+				return config.GetFloat(rightSaberSettings, "ForceMultiplierY", 2.0f, true);
+			}
+			set
+			{
+
+				config.SetFloat(rightSaberSettings, "ForceMultiplierY", value);
+			}
+		}
+		internal static float ZR
+		{
+			get
+			{
+				return config.GetFloat(rightSaberSettings, "ForceMultiplierZ",2.0f, true);
+			}
+			set
+			{
+
+				config.SetFloat(rightSaberSettings, "ForceMultiplierZ", value);
+			}
+		}
+		internal static float LIFER
+		{
+			get
+			{
+				return config.GetFloat(rightSaberSettings, "DebrisMaxLifetime", 1f, true);
+			}
+			set
+			{
+				config.SetFloat(rightSaberSettings, "DebrisMaxLifetime", value);
+			}
+		}
 		#endregion
 
-		static public float XFORCE
+		internal static void CopyLeftDebrisSettings()
 		{
-			get
+			if (!COPYLTOR)
+				return;
+			else
 			{
-				return config.GetFloat(section_DebrisForceMultipliers, "X", 2.0f, true);
+				XR = XL;
+				YR = YL;
+				ZR = ZL;
+				LIFER = LIFEL;
 			}
 		}
-		static public float YFORCE
-		{
-			get
-			{
-				return config.GetFloat(section_DebrisForceMultipliers, "Y", 2.0f, true);
-			}
-		}
-		static public float ZFORCE
-		{
-			get
-			{
-				return config.GetFloat(section_DebrisForceMultipliers, "Z", 2.0f, true);
-			}
-		}
-
-		static readonly string settingForceY = "ForceMultiplierY";
-		internal static float SetForceY
-		{
-			get
-			{
-				return config.GetFloat(section_Main, settingForceY, 2.0f, true);
-			}
-			set
-			{
-				config.SetFloat(section_Main, settingForceZ, value);
-			}
-		}
-
-		static readonly string settingForceZ = "ForceMultiplierZ";
-		internal static float SetForceZ
-		{
-			get
-			{
-				return config.GetFloat(section_Main, settingForceZ, -2.0f, true);
-			}
-			set
-			{
-				config.SetFloat(section_Main, settingForceZ, value);
-			}
-		}
-
-		static readonly string settingLifetime = "DebrisMaxLifetime";
-		internal static float SetLifetime
-		{
-			get
-			{
-				return config.GetFloat(section_Main, settingLifetime, 1f, true);
-			}
-			set
-			{
-				config.SetFloat(section_Main, settingLifetime, value);
-			}
-		}
-
-
-		#region NCMsettings
-
-		static readonly string settingNCMenabled = "UseNoteCutMinimizerSettings";
-		internal static bool SetNCMenabled
-		{
-			get
-			{
-				return config.GetBool(sectionNCM, settingNCMenabled, false, true);
-			}
-			set
-			{
-				config.SetBool(sectionNCM, settingNCMenabled, value);
-			}
-		}
-
-		static readonly string settingNCMforce = "ncmForceMultipler";
-		internal static float SetNcmForceMultiplier
-		{
-			get
-			{
-				return config.GetFloat(sectionNCM, settingNCMforce, 2f, true);
-			}
-			set
-			{
-				config.SetFloat(sectionNCM, settingNCMforce, value);
-			}
-		}
-
-		static readonly string settingNcmDebrisLifetime = "ncmDebrisLifetime";
-		internal static float SetNcmDebrisLifetime
-		{
-			get
-			{
-				return config.GetFloat(sectionNCM, settingNcmDebrisLifetime, 1f, true);
-			}
-			set
-			{
-				config.SetFloat(sectionNCM, settingNcmDebrisLifetime, value);
-			}
-		}
-
-		#endregion
-
-
-		static readonly string DEBUGGINGENABLED = "EnableDebugging";
-		internal static bool SetDebuggingEnabled
-		{
-			get
-			{
-				return config.GetBool(section_DebugSettings, DEBUGGINGENABLED, false, true);
-			}
-			set
-			{
-				config.GetBool(section_DebugSettings, DEBUGGINGENABLED, value);
-
-			}
-		}
-
-		static readonly string settingDebrisLogCapacity = "DebugLogCapacity";
-		internal static int SetDebrisLogCapacity
-		{
-
-			get
-			{
-				return config.GetInt(section_DebugSettings, settingDebrisLogCapacity, 100, true);
-			}
-			set
-			{
-				config.GetInt(section_DebugSettings, settingDebrisLogCapacity, value);
-			}
-		}
-
-		//static readonly string setting = " ";
-		//internal static float var
-		//{
-
-		//	get
-		//	{
-		//		return config.GetFloat(sectionOne, setting, 1f, true);
-		//	}
-		//	set
-		//	{
-		//		config.SetFloat(sectionOne, setting, value);
-		//	}
-		//}
 	}
 }
+
+
+//static readonly string sectionNCM = "NoteCutMinimizerSettings";
+//static readonly string _info = "DebugSettings";
+
+//#region NCMsettings
+
+//static readonly string settingNCMenabled = "UseNoteCutMinimizerSettings";
+//internal static bool SetNCMenabled
+//{
+//	get
+//	{
+//		return config.GetBool(sectionNCM, settingNCMenabled, false, true);
+//	}
+//	set
+//	{
+//		config.SetBool(sectionNCM, settingNCMenabled, value);
+//	}
+//}
+
+//static readonly string settingNCMforce = "ncmForceMultipler";
+//internal static float SetNcmForceMultiplier
+//{
+//	get
+//	{
+//		return config.GetFloat(sectionNCM, settingNCMforce, 2f, true);
+//	}
+//	set
+//	{
+//		config.SetFloat(sectionNCM, settingNCMforce, value);
+//	}
+//}
+
+//static readonly string settingNcmDebrisLifetime = "ncmDebrisLifetime";
+//internal static float SetNcmDebrisLifetime
+//{
+//	get
+//	{
+//		return config.GetFloat(sectionNCM, settingNcmDebrisLifetime, 1f, true);
+//	}
+//	set
+//	{
+//		config.SetFloat(sectionNCM, settingNcmDebrisLifetime, value);
+//	}
+//}
+
+//#endregion
+
+
+//static readonly string DEBUGGINGENABLED = "EnableDebugging";
+//internal static bool SetDebuggingEnabled
+//{
+//	get
+//	{
+//		return config.GetBool(_info, DEBUGGINGENABLED, false, true);
+//	}
+//	set
+//	{
+//		config.GetBool(_info, DEBUGGINGENABLED, value);
+
+//	}
+//}
+
+//internal static int Info_LogCapacity
+//{
+//	get => config.GetInt(_info, "LogCapacity", defaultValue: 100, autoSave: false);
+//	set => config.SetInt(_info, "LogCapacity", value);
+//}
+
+//private static void LoadConfig()
+//		{
+
+//		}
+
+//static readonly string setting = " ";
+//internal static float var
+//{
+
+//	get
+//	{
+//		return config.GetFloat(sectionOne, setting, 1f, true);
+//	}
+//	set
+//	{
+//		config.SetFloat(sectionOne, setting, value);
+//	}
+//}
