@@ -28,7 +28,7 @@ namespace NoteDebrisRedux
 					Logger.LogDebrisData("In :", noteData, force, lifeTime, cutNormal);
 				}
 
-				lifeTime = Mathf.Clamp(nextNoteTime, 0.1f, CustomNoteDebris.LifeTimeMax);
+				lifeTime = Mathf.Clamp(nextNoteTime * CustomNoteDebris.LifeTimePercentOfNoteInterval, 0.1f, CustomNoteDebris.LifeTimeMax);
 				force = Vector3.Scale(initForce, CustomNoteDebris.ForceMultiplier);
 
 				if (noteData.id < 10)

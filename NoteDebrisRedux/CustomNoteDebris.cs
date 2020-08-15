@@ -14,7 +14,7 @@ namespace NoteDebrisRedux
 		internal static Vector3 ForceMultiplier { get; set; } = Vector3.one;
 		
 		internal static float LifeTimeMax { get; set; } = 1.5f;
-		
+		internal static float LifeTimePercentOfNoteInterval;
 
 		internal static void Load()
 		{
@@ -22,6 +22,7 @@ namespace NoteDebrisRedux
 
 			ForceMultiplier = new Vector3(Config._forceX, Config._forceY, Config._forceZ);
 			LifeTimeMax = Config._lifeMax;
+			LifeTimePercentOfNoteInterval = Config._lifeTimePercentOfNoteInterval;
 			Logger.log.Info("NoteDebrisMods loaded");
 		}
 	}
