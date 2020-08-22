@@ -10,36 +10,46 @@ namespace NoteDebrisRedux
 	//[HarmonyPatch("Init")]
 	class NoteDebrisPatch
 	{
-		public static void Prefix(NoteType noteType, Transform initTransform, Vector3 cutPoint, Vector3 cutNormal, ref Vector3 force, ref float lifeTime)
+		
+		public static void Prefix(Transform initTransform, ref Vector3 force, ref float lifeTime)
 		{
-			if (!CustomNoteDebris._modifyDebris)
-			{
-				return;
-			}
-
-			else
-			{
-				NoteData noteData = initTransform.parent.GetComponent<NoteController>().noteData;
-				Vector2 addOutwardForce = CustomNoteDebris.ObstructionFactor(initTransform, noteData);
-				Vector3 adjustedDebrisForce = new Vector3(force.x +addOutwardForce.x, force.y+addOutwardForce.y, Mathf.Abs(force.z));
-				float nextNoteTime = noteData.timeToNextBasicNote;
-
-				if (noteData.id < 10)
-				{
-					Logger.LogDebrisData("In :", noteData, force, lifeTime, cutNormal);
-				}
-
-				lifeTime = Mathf.Clamp(nextNoteTime * CustomNoteDebris.LifeTimePercentOfNoteInterval, 0.1f, CustomNoteDebris.LifeTimeMax);
-				force = Vector3.Scale(adjustedDebrisForce, CustomNoteDebris.ForceMultiplier);
-
-				if (noteData.id < 10)
-				{
-					Logger.LogDebrisData("Out:", noteData, force, lifeTime, cutNormal);
-				}
-			}
+			NoteData note = initTransform.GetComponentInParent<NoteController>().noteData;
+			
+			if (note.id < 10) Logger.LogDebrisData("In :", initTransform, force, lifeTime);
+			
+			float angle = CustomNoteDebris.DebrisAngleToView(initTransform, force);
+			bool debrisObstructsView = CustomNoteDebris.DebrisObstructsView(angle);
+			
+			force = Vector3.Scale(force, CustomNoteDebris.ForceMultiplier(debrisObstructsView));
+			lifeTime = CustomNoteDebris.LifetimeAdjustment(angle, debrisObstructsView, note.timeToNextBasicNote);
+			
+			if (note.id < 10) Logger.LogDebrisData("Out :", initTransform, force, lifeTime);
 		}
 	}
 }
+
+
+//public static void Prefix(NoteType noteType, Transform initTransform, Vector3 cutPoint, Vector3 cutNormal, ref Vector3 force, ref float lifeTime)
+
+
+//NoteData noteData = initTransform.parent.GetComponent<NoteController>().noteData;
+//Vector3 initDebrisForce = force;
+//Vector2 addOutwardForce = CustomNoteDebris.ObstructionFactor(initTransform, noteData);
+//Vector3 adjustedDebrisForce = new Vector3(force.x +addOutwardForce.x, force.y+addOutwardForce.y, Mathf.Abs(force.z));
+//float nextNoteTime = noteData.timeToNextBasicNote;
+
+//if (noteData.id < 10)
+//{
+//	Logger.LogDebrisData("In :", noteData, force, lifeTime, cutNormal);
+//}
+
+//lifeTime = Mathf.Clamp(nextNoteTime * CustomNoteDebris.LifeTimePercentOfNoteInterval, 0.1f, CustomNoteDebris.LifeTimeMax);
+//force = Vector3.Scale(adjustedDebrisForce, CustomNoteDebris.ForceMultiplier);
+
+//if (noteData.id < 10)
+//{
+//	Logger.LogDebrisData("Out:", noteData, force, lifeTime, cutNormal);
+//}
 
 
 

@@ -9,40 +9,77 @@ namespace NoteDebrisRedux
 {
 	static public class CustomNoteDebris
 	{
-		private const float center = 1.4f;
-		internal static bool _modifyDebris { get; set; } = true;
+		internal static float Eyelevel = 1.4f;
+		internal static bool ModifyDebris { get; set; } = true;
+		internal static float ForceXY { get; set; } = 1f;
+		internal static float ForceZ { get; set; } = 1f;
 
-		internal static Vector3 ForceMultiplier { get; set; } = Vector3.one;
-		internal static float ObstructionMultiplier = 10f;
+		private static float DebrisReduction { get; set; } = .25f;
 		internal static float LifeTimeMax { get; set; } = 1.5f;
 		internal static float LifeTimePercentOfNoteInterval;
 
 		internal static void Load()
 		{
-			_modifyDebris = Config._enableMod;
-
-			ForceMultiplier = new Vector3(Config._forceX, Config._forceX, Config._forceZ);
-			ObstructionMultiplier = Config._forceX * 10f;
-			LifeTimeMax = Config._lifeMax;
-			LifeTimePercentOfNoteInterval = Config._lifeTimePercentOfNoteInterval;
+			ModifyDebris = Config.ModEnabled;
+			Eyelevel = Config.Eyelevel;
+			ForceXY = Config.DebrisForceXY;
+			ForceZ = Config.DebrisForceZ;
+			DebrisReduction = Config.DebrisReductionFactor;
+			LifeTimeMax = Config.MaxLifetime;
+			LifeTimePercentOfNoteInterval = Config.LifeTimePercentOfNoteInterval;
 			Logger.log.Info("NoteDebrisMods loaded");
 		}
 
-
-		static public Vector2 ObstructionFactor(Transform noteTransform, NoteData noteData)
+		public static Vector3 ForceMultiplier(bool obstructsView)
 		{
-			Vector2 noteDirection = noteData.cutDirection.Direction();
-			Vector2 notePosition = new Vector2(noteTransform.position.x, noteTransform.position.y - center).normalized;
-			float amount = noteDirection == Vector2.zero ? 90f : Vector2.Angle(notePosition, noteDirection);
-			amount /= 90f;
-			amount *= ObstructionMultiplier;
-			Vector2 result = new Vector2(notePosition.x * amount, notePosition.y * amount);
+			return obstructsView ? new Vector3(DebrisReduction, DebrisReduction, ForceZ) : new Vector3(ForceXY, ForceXY, ForceZ);
+		}
+
+		public static float LifetimeAdjustment(float angle, bool obstructsView, float timeBetweenNotes)
+		{
+			float result;
+			if (angle < 60f)
+			{
+				result = LifeTimeMax;
+			}
+			else if (obstructsView)
+			{
+				result = Mathf.Min(LifeTimePercentOfNoteInterval, timeBetweenNotes);
+			}
+			else
+			{
+				result = timeBetweenNotes * LifeTimePercentOfNoteInterval;
+			}
+
 			return result;
 		}
 
+		public static float DebrisAngleToView(Transform note, Vector3 debris)
+		{
+			Vector2 from = NotePositionToView(note);
+			Vector2 to = new Vector2(debris.x, debris.y);
+			return Vector2.Angle(from, to);
+		}
 
+		public static Vector2 NotePositionToView(Transform note) => new Vector2(note.position.x, note.position.y - Eyelevel);
+
+
+		static public bool DebrisObstructsView(float angle) => angle > 110f;
 	}
 }
+
+
+		//static public Vector2 ObstructionFactor(Transform noteTransform, NoteData noteData)
+		//{
+		//	Vector2 noteDirection = noteData.cutDirection.Direction();
+		//	Vector2 notePosition = new Vector2(noteTransform.position.x, noteTransform.position.y - Eyelevel).normalized;
+		//	float amount = noteDirection == Vector2.zero ? 90f : Vector2.Angle(notePosition, noteDirection);
+		//	amount /= 90f;
+		//	amount *= ObstructionMultiplier;
+		//	Vector2 result = new Vector2(notePosition.x * amount, notePosition.y * amount);
+		//	return result;
+		//}
+
 //internal static float RightLifeMax { get; set; } = 1.5f;
 //internal static Vector3 RightForce { get; set; } = Vector3.one;
 //private static bool RightEnabled { get; set; } = false;

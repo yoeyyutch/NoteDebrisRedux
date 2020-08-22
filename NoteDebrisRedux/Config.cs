@@ -15,12 +15,13 @@ namespace NoteDebrisRedux
 
 
 
+
 		internal static void Init()
 		{
 			config = new BS_Utils.Utilities.Config(Plugin.PluginName);
 		}
 
-		internal static bool _enableMod
+		internal static bool ModEnabled
 		{
 			get
 			{
@@ -31,7 +32,7 @@ namespace NoteDebrisRedux
 				config.SetBool(NoteDebrisSettings, "ModifyNoteDebris", value);
 			}
 		}
-		internal static float _forceX
+		internal static float DebrisForceXY
 		{
 			get
 			{
@@ -42,18 +43,18 @@ namespace NoteDebrisRedux
 				config.SetFloat(NoteDebrisSettings, "ForceMultiplierX", value);
 			}
 		}
-		internal static float _forceY
+		internal static float DebrisReductionFactor
 		{
 			get
 			{
-				return config.GetFloat(NoteDebrisSettings, "ForceMultiplierY", 2.0f, true);
+				return config.GetFloat(NoteDebrisSettings, "ForceMultiplierY", .25f, true);
 			}
 			set
 			{
 				config.SetFloat(NoteDebrisSettings, "ForceMultiplierY", value);
 			}
 		}
-		internal static float _forceZ
+		internal static float DebrisForceZ
 		{
 			get
 			{
@@ -64,7 +65,7 @@ namespace NoteDebrisRedux
 				config.SetFloat(NoteDebrisSettings, "ForceMultiplierZ", value);
 			}
 		}
-		internal static float _lifeMax
+		internal static float MaxLifetime
 		{
 			get
 			{
@@ -75,7 +76,7 @@ namespace NoteDebrisRedux
 				config.SetFloat(NoteDebrisSettings, "MaxDebrisLIfetime", value);
 			}
 		}
-		internal static float _lifeTimePercentOfNoteInterval
+		internal static float LifeTimePercentOfNoteInterval
 		{
 			get
 			{
@@ -84,6 +85,18 @@ namespace NoteDebrisRedux
 			set
 			{
 				config.SetFloat(NoteDebrisSettings, "lifeTimePercentOfNoteInterval", value);
+			}
+		}
+
+		internal static float Eyelevel
+		{
+			get
+			{
+				return config.GetFloat(NoteDebrisSettings, "EyeLevel", 1.4f, true);
+			}
+			set
+			{
+				config.SetFloat(NoteDebrisSettings, "Eyelevel", value);
 			}
 		}
 	}
