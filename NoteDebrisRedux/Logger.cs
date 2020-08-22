@@ -23,12 +23,12 @@ namespace NoteDebrisRedux
 			log.Info(string.Join(", ", msg, noteID, direction, force, normal, life));
 		}
 
-		public static void DebugSwing(NoteController note, Vector3 cutPoint, Vector3 cutNormal, Vector3 debrisForce)
-		{
-			int id = note.noteData.id;
-			string direction = note.noteData.cutDirection.ToString();
-			string normal = cutNormal.ToString("F2");
-			string force = debrisForce.ToString("F3");
-		}
+		//public static void DebugSwing(NoteController note, Vector3 cutPoint, Vector3 cutNormal, Vector3 debrisForce)
+		//{
+		//	int id = note.noteData.id;
+		//	string direction = note.noteData.cutDirection.ToString();
+		//	string normal = cutNormal.ToString("F2");
+		//	string force = debrisForce.ToString("F3");
+		//}
 	}
 }

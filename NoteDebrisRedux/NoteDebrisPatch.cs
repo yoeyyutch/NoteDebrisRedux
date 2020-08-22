@@ -20,7 +20,8 @@ namespace NoteDebrisRedux
 			else
 			{
 				NoteData noteData = initTransform.parent.GetComponent<NoteController>().noteData;
-				Vector3 initForce = new Vector3(force.x, force.y, Mathf.Abs(force.z));
+				Vector2 addOutwardForce = CustomNoteDebris.ObstructionFactor(initTransform, noteData);
+				Vector3 adjustedDebrisForce = new Vector3(force.x +addOutwardForce.x, force.y+addOutwardForce.y, Mathf.Abs(force.z));
 				float nextNoteTime = noteData.timeToNextBasicNote;
 
 				if (noteData.id < 10)
@@ -29,7 +30,7 @@ namespace NoteDebrisRedux
 				}
 
 				lifeTime = Mathf.Clamp(nextNoteTime * CustomNoteDebris.LifeTimePercentOfNoteInterval, 0.1f, CustomNoteDebris.LifeTimeMax);
-				force = Vector3.Scale(initForce, CustomNoteDebris.ForceMultiplier);
+				force = Vector3.Scale(adjustedDebrisForce, CustomNoteDebris.ForceMultiplier);
 
 				if (noteData.id < 10)
 				{
