@@ -14,13 +14,14 @@ namespace NoteDebrisRedux
 		public static void Prefix(Transform initTransform, ref Vector3 force, ref float lifeTime)
 		{
 			NoteData note = initTransform.GetComponentInParent<NoteController>().noteData;
-			
-			if (note.id < 10) Logger.LogDebrisData("In :", initTransform, force, lifeTime);
-			
-			float angle = CustomNoteDebris.DebrisAngleToView(initTransform, force);
+			Vector3 notePos = CustomNoteDebris.HeadPosition() - initTransform.position;
+			float angle = Vector3.Angle(notePos, force);
+			float a = (angle / 180) + 1f;
 			bool debrisObstructsView = CustomNoteDebris.DebrisObstructsView(angle);
-			
-			force = Vector3.Scale(force, CustomNoteDebris.ForceMultiplier(debrisObstructsView));
+
+			if (note.id < 10) Logger.LogDebrisData("In :", initTransform, force, lifeTime);
+
+			force = Vector3.Scale(a * CustomNoteDebris.ForceAdjustment(), force);
 			lifeTime = CustomNoteDebris.LifetimeAdjustment(angle, debrisObstructsView, note.timeToNextBasicNote);
 			
 			if (note.id < 10) Logger.LogDebrisData("Out :", initTransform, force, lifeTime);

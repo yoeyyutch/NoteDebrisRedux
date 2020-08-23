@@ -3,6 +3,7 @@
 //using System.Linq;
 //using System.Text;
 //using System.Threading.Tasks;
+using System.Linq;
 using UnityEngine;
 
 namespace NoteDebrisRedux
@@ -14,9 +15,9 @@ namespace NoteDebrisRedux
 		internal static float ForceXY { get; set; } = 1f;
 		internal static float ForceZ { get; set; } = 1f;
 
-		private static float DebrisReduction { get; set; } = .25f;
+		//private static float DebrisReduction { get; set; } = .25f;
 		internal static float LifeTimeMax { get; set; } = 1.5f;
-		internal static float LifeTimePercentOfNoteInterval;
+		internal static float LifeTimePercentOfNoteInterval { get; set; } = .8f;
 
 		internal static void Load()
 		{
@@ -24,19 +25,24 @@ namespace NoteDebrisRedux
 			Eyelevel = Config.Eyelevel;
 			ForceXY = Config.DebrisForceXY;
 			ForceZ = Config.DebrisForceZ;
-			DebrisReduction = Config.DebrisReductionFactor;
+			//DebrisReduction = Config.DebrisReductionFactor;
 			LifeTimeMax = Config.MaxLifetime;
 			LifeTimePercentOfNoteInterval = Config.LifeTimePercentOfNoteInterval;
 			Logger.log.Info("NoteDebrisMods loaded");
 		}
+		static public bool DebrisObstructsView(float angle) => angle > 125f;
 
-		public static Vector3 ForceMultiplier(bool obstructsView)
-		{
-			return obstructsView ? new Vector3(DebrisReduction, DebrisReduction, ForceZ) : new Vector3(ForceXY, ForceXY, ForceZ);
-		}
+		public static Vector3 HeadPosition() => Resources.FindObjectsOfTypeAll<PlayerController>().First().headPos;
+
+		//public static Vector3 NotePositionToView(Transform note) => new Vector2(note.position.x - HeadPosition().x, note.position.y - HeadPosition().y);
+
+		//public static Vector3 ForceMultiplier(bool obstructsView) => obstructsView ? new Vector3(DebrisReduction, DebrisReduction, ForceZ) : new Vector3(ForceXY, ForceXY, ForceZ);
+
+		public static Vector3 ForceAdjustment() => new Vector3(ForceXY, ForceXY, ForceZ);
 
 		public static float LifetimeAdjustment(float angle, bool obstructsView, float timeBetweenNotes)
 		{
+			float t = timeBetweenNotes * LifeTimePercentOfNoteInterval;
 			float result;
 			if (angle < 60f)
 			{
@@ -44,27 +50,25 @@ namespace NoteDebrisRedux
 			}
 			else if (obstructsView)
 			{
-				result = Mathf.Min(LifeTimePercentOfNoteInterval, timeBetweenNotes);
+				result = Mathf.Min(t, 0.1f);
 			}
 			else
 			{
-				result = timeBetweenNotes * LifeTimePercentOfNoteInterval;
+				result = t;
 			}
 
 			return result;
 		}
 
-		public static float DebrisAngleToView(Transform note, Vector3 debris)
-		{
-			Vector2 from = NotePositionToView(note);
-			Vector2 to = new Vector2(debris.x, debris.y);
-			return Vector2.Angle(from, to);
-		}
-
-		public static Vector2 NotePositionToView(Transform note) => new Vector2(note.position.x, note.position.y - Eyelevel);
+		//public static float DebrisAngleToView(Transform note, Vector3 debris)
+		//{
+		//	//Vector2 from = NotePositionToView(note);
+		//	//Vector2 to = new Vector2(debris.x, debris.y);
+		//	return Vector2.Angle(NotePositionToView(note), new Vector2(debris.x, debris.y));
+		//}
 
 
-		static public bool DebrisObstructsView(float angle) => angle > 110f;
+
 	}
 }
 

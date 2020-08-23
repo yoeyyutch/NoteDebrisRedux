@@ -36,7 +36,7 @@ namespace NoteDebrisRedux
 		{
 			get
 			{
-				return config.GetFloat(NoteDebrisSettings, "ForceMultiplierX", 3.0f, true);
+				return config.GetFloat(NoteDebrisSettings, "ForceMultiplierX", 1.0f, true);
 			}
 			set
 			{
@@ -47,18 +47,18 @@ namespace NoteDebrisRedux
 		{
 			get
 			{
-				return config.GetFloat(NoteDebrisSettings, "ForceMultiplierY", .25f, true);
+				return config.GetFloat(NoteDebrisSettings, "DebrisReductionFactor", .25f, true);
 			}
 			set
 			{
-				config.SetFloat(NoteDebrisSettings, "ForceMultiplierY", value);
+				config.SetFloat(NoteDebrisSettings, "DebrisReductionFactor", value);
 			}
 		}
 		internal static float DebrisForceZ
 		{
 			get
 			{
-				return config.GetFloat(NoteDebrisSettings, "ForceMultiplierZ", -2.0f, true);
+				return config.GetFloat(NoteDebrisSettings, "ForceMultiplierZ", 1.0f, true);
 			}
 			set
 			{
@@ -69,18 +69,18 @@ namespace NoteDebrisRedux
 		{
 			get
 			{
-				return config.GetFloat(NoteDebrisSettings, "MaxDebrisLifetime", 1f, true);
+				return config.GetFloat(NoteDebrisSettings, "MaxDebrisLifetime", 2f, true);
 			}
 			set
 			{
-				config.SetFloat(NoteDebrisSettings, "MaxDebrisLIfetime", value);
+				config.SetFloat(NoteDebrisSettings, "MaxDebrisLifetime", value);
 			}
 		}
 		internal static float LifeTimePercentOfNoteInterval
 		{
 			get
 			{
-				return config.GetFloat(NoteDebrisSettings, "lifeTimePercentOfNoteInterval", 1f, true);
+				return config.GetFloat(NoteDebrisSettings, "lifeTimePercentOfNoteInterval", .8f, true);
 			}
 			set
 			{
